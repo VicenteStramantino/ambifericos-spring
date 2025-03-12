@@ -8,12 +8,12 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Item")
+@Table(name = "ItemPedido")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Item {
+public class ItemPedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
