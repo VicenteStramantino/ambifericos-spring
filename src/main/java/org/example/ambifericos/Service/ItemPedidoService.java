@@ -3,8 +3,10 @@ package org.example.ambifericos.Service;
 import org.example.ambifericos.Model.Cliente;
 import org.example.ambifericos.Model.ItemPedido;
 import org.example.ambifericos.Repository.ItemPedidoRepository;
+import org.springframework.core.ReactiveAdapterRegistry;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +22,12 @@ public class ItemPedidoService {
     }
 
     public List<ItemPedido> listaItensPedido(){
-        return itemPedidoRepository.findAll();
+        try {
+            return itemPedidoRepository.findAll();
+        }catch (Exception npc){
+            System.out.println(npc.getMessage());
+            return new ArrayList<ItemPedido>();
+        }
     }
 
     public ItemPedido listaItemPedidoPeloId(Long id){
@@ -28,13 +35,13 @@ public class ItemPedidoService {
     }
 
     public boolean adicionaItemPedido(List<ItemPedido> listItemPedido){
-//        for (ItemPedido itemPedido : listItemPedido){
-//            if(pedidoService.listaPedidoPeloId(itemPedido.getPedido().getId()) != null && produtoService.listaProdutoPeloId(itemPedido.getPedido().getId())){
-//                itemPedidoRepository.save(itemPedido);
-//            }else{
-//                return false;
-//            }
-//        }
+        for (ItemPedido itemPedido : listItemPedido){
+            if(pedidoService.listaPedidoPeloId(itemPedido.getPedido().getId()) != null && produtoService.buscarPorID(itemPedido.getPedido().getId()) != null){
+                itemPedidoRepository.save(itemPedido);
+            }else{
+                return false;
+            }
+        }
         return true;
     }
 

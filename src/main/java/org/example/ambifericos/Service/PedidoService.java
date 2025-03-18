@@ -27,10 +27,4 @@ public class PedidoService {
     public List<Pedido> listaPedidosPeloCliente(Long id){
         return pedidoRepository.findPedidosByClienteId(id);
     }
-
-
-
-
-
-
 }
