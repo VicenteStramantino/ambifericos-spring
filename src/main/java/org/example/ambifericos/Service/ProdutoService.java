@@ -35,11 +35,11 @@ public class ProdutoService {
 
     public boolean remover(Long id){
         if(buscarPorID(id) != null){
-            return false;
-        }
-        else{
             produtoRepository.deleteById(id);
             return true;
+        }
+        else{
+            return false;
         }
     }
 }
