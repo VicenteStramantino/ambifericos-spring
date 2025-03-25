@@ -1,4 +1,5 @@
 package org.example.ambifericos.Service;
+import org.example.ambifericos.Model.Cliente;
 import org.example.ambifericos.Model.Produto;
 import org.example.ambifericos.Repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,12 @@ public class ProdutoService {
     }
 
     public Produto buscarPorID(Long id){
-        return produtoRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        Optional<Produto> produto =  produtoRepository.findById(id);
+        return produto.orElse(null);
     }
 
     public boolean inserir(Produto produto){
-        if(buscarPorID(produto.getId()) != null){
+        if(buscarPorID(produto.getId()) == null){
             produtoRepository.save((produto));
             return true;
         }

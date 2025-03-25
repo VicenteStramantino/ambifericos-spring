@@ -19,8 +19,8 @@ public class ClienteService {
     }
 
     public Cliente listarClientePeloId(Long id){
-        return clienteRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Cliente não encontrado"));
+        Optional<Cliente> cliente =  clienteRepository.findById(id);
+        return cliente.orElse(null);
     }
 
     public Cliente listarClientePeloEmailSenha(String email, String senha){
@@ -28,17 +28,15 @@ public class ClienteService {
     }
 
     public boolean adicionaCliente(Cliente cliente){
-        if(listarClientePeloId(cliente.getId()) != null) {
-            clienteRepository.save(cliente);
-            return true;
-        }else{
+        if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
             return false;
         }
+        clienteRepository.save(cliente);
+        return true;
     }
 
     public boolean removeCliente(Long id){
         clienteRepository.deleteById(id);
-
         return listarClientePeloId(id) == null;
     }
 }

@@ -21,7 +21,7 @@ public class ItemPedidoController {
     @GetMapping("/listarTudo")
     public ResponseEntity<?> listaItensPedido(){
         List<ItemPedido> listItemPedido = itemPedidoService.listaItensPedido();
-        return listItemPedido.isEmpty()
+        return !listItemPedido.isEmpty()
                 ? ResponseEntity.ok(itemPedidoService.listaItensPedido())
                 : ResponseEntity.internalServerError().body("Não existe nenhum item pedido no banco!");
     }
