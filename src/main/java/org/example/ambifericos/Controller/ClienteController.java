@@ -24,13 +24,19 @@ public class ClienteController {
     }
 
     @GetMapping("/listarPeloId")
-    public ResponseEntity<Cliente> listarPeloId(@RequestParam Long id){
-        return ResponseEntity.ok(clienteService.listarClientePeloId(id));
+    public ResponseEntity<?> listarPeloId(@RequestParam Long id){
+        Cliente cliente = clienteService.listarClientePeloId(id);
+        return  cliente != null
+            ? ResponseEntity.ok(cliente)
+            : ResponseEntity.internalServerError().body("Cliente não foi encontrado");
     }
 
     @GetMapping("/listarClientePeloEmailSenha")
-    public ResponseEntity<Cliente> listarClientePeloEmailSenha(@RequestParam String email, @RequestParam String senha){
-        return ResponseEntity.ok(clienteService.listarClientePeloEmailSenha(email, senha));
+    public ResponseEntity<?> listarClientePeloEmailSenha(@RequestParam String email, @RequestParam String senha){
+        Cliente cliente = clienteService.listarClientePeloEmailSenha(email, senha);
+        return  cliente != null
+                ? ResponseEntity.ok(cliente)
+                : ResponseEntity.internalServerError().body("Cliente não foi encontrado");
     }
 
     @PostMapping("/adicionaCliente")

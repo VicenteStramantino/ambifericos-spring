@@ -21,18 +21,28 @@ public class PedidoController {
     }
 
     @GetMapping("/listarPedidos")
-    public ResponseEntity<List<Pedido>> listarPedidos(){
-        return ResponseEntity.ok(pedidoService.listarPedidos());
+    public ResponseEntity<?> listarPedidos(){
+        List<Pedido> listaPedido = pedidoService.listarPedidos();
+        return !listaPedido.isEmpty()
+                ? ResponseEntity.ok(listaPedido)
+                : ResponseEntity.internalServerError().body("Não existe pedidos cadastrados!");
     }
 
     @GetMapping("/listarPedidoPeloId")
-    public ResponseEntity<Pedido> listarPedidoPeloId(@RequestParam Long id){
-        return ResponseEntity.ok(pedidoService.listaPedidoPeloId(id));
+    public ResponseEntity<?> listarPedidoPeloId(@RequestParam Long id){
+        Pedido pedido = pedidoService.listaPedidoPeloId(id);
+        return pedido != null
+                ? ResponseEntity.ok(pedido)
+                : ResponseEntity.internalServerError().body("Não existe pedido cadastrado!");
     }
 
     @GetMapping("/listarPedidosPeloCliente")
-    public ResponseEntity<List<Pedido>> listarPedidosPeloCliente(@RequestParam Long id){
-        return ResponseEntity.ok(pedidoService.listaPedidosPeloCliente(id));
+    public ResponseEntity<?> listarPedidosPeloCliente(@RequestParam Long id){
+        List<Pedido> listaPedido = pedidoService.listaPedidosPeloCliente(id);
+
+        return !listaPedido.isEmpty()
+                ? ResponseEntity.ok(listaPedido)
+                : ResponseEntity.internalServerError().body("O cliente não possui nenhum pedido!");
     }
 
 }

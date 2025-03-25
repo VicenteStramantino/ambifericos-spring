@@ -19,8 +19,6 @@ public class AdministradorController {
 
     private final AdministradorService administradorService;
 
-
-
     public AdministradorController(AdministradorService administradorService){
         this.administradorService = administradorService;
     }
