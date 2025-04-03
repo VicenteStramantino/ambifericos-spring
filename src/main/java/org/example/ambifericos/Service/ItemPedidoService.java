@@ -26,7 +26,7 @@ public class ItemPedidoService {
             return itemPedidoRepository.findAll();
         }catch (Exception npc){
             System.out.println(npc.getMessage());
-            return new ArrayList<ItemPedido>();
+            return new ArrayList<>();
         }
     }
 

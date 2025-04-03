@@ -35,6 +35,10 @@ public class ProdutoService {
         }
     }
 
+    public void atualizarProduto(Produto produto) {
+        produtoRepository.save(produto);
+    }
+
     public boolean remover(Long id){
         if(buscarPorID(id) != null){
             produtoRepository.deleteById(id);
