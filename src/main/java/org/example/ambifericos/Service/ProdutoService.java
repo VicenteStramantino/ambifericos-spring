@@ -26,13 +26,11 @@ public class ProdutoService {
     }
 
     public boolean inserir(Produto produto){
-        if(buscarPorID(produto.getId()) == null){
-            produtoRepository.save((produto));
-            return true;
-        }
-        else{
+        if (produtoRepository.existsByNome(produto.getNome())) {
             return false;
         }
+        produtoRepository.save((produto));
+        return true;
     }
 
     public void atualizarProduto(Produto produto) {

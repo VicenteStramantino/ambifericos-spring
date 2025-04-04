@@ -4,10 +4,7 @@ import org.example.ambifericos.Model.Administrador;
 import org.example.ambifericos.Service.AdministradorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,8 +35,8 @@ public class AdministradorController {
         }
     }
 
-    @GetMapping("/inserir")
-    public ResponseEntity<?> inserir(@RequestParam Administrador administrador){
+    @PostMapping("/inserir")
+    public ResponseEntity<?> inserir(@RequestBody Administrador administrador){
         if(administradorService.inserirAdminstrador(administrador) == true){
             return ResponseEntity.ok("adminstrador inserido com sucesso.");
         }
@@ -50,7 +47,7 @@ public class AdministradorController {
 
 
 
-    @GetMapping("/remover")
+    @DeleteMapping("/remover")
     public ResponseEntity<?> remover(@RequestParam Long id){
         if(administradorService.deletarAdmin(id) == false){
             return ResponseEntity.internalServerError().body("Erro, adminstrador não encontrado");

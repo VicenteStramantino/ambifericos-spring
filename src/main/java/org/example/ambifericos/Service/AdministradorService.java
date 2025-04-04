@@ -29,12 +29,11 @@ public class AdministradorService {
     }
 
     public boolean inserirAdminstrador(Administrador administrador) {
-        if (buscarPorID(administrador.getId()).isEmpty()) {
-            administradorRepository.save(administrador);
-            return true;
-        } else {
+        if (administradorRepository.existsByNome(administrador.getNome())) {
             return false;
         }
+        administradorRepository.save((administrador));
+        return true;
 
     }
 
