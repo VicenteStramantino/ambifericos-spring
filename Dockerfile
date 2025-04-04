@@ -6,6 +6,6 @@ RUN mvn clean package -DskipTeste
 
 
 FROM openjdk:17-jdk
-COPY --from=build /target/Spring_SQL-0.0.1-SNAPSHOT.jar springSql.jar
+COPY --from=build /target/Ambifericos-0.0.1-SNAPSHOT.jar Ambifericos.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "springSql.jar"]
+ENTRYPOINT ["java", "-jar", "Ambifericos.jar"]
