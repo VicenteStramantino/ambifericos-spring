@@ -1,5 +1,8 @@
 package org.example.ambifericos.Controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import org.example.ambifericos.DTO.AdministradorRequest;
+import org.example.ambifericos.DTO.ClienteRequest;
 import org.example.ambifericos.Model.Cliente;
 import org.example.ambifericos.Service.ClienteService;
 import org.springframework.http.HttpStatus;
@@ -43,17 +46,25 @@ public class ClienteController {
 
     @GetMapping("/listarClientePeloEmailSenha")
     public ResponseEntity<?> listarClientePeloEmailSenha(@RequestParam String email, @RequestParam String senha){
-        Cliente cliente = clienteService.listarClientePeloEmailSenha(email, senha);
+        Cliente cliente = clienteService.listarCliqentePeloEmailSenha(email, senha);
         return  cliente != null
                 ? ResponseEntity.ok(cliente)
                 : ResponseEntity.internalServerError().body("Cliente não foi encontrado");
     }
 
     @PostMapping("/adicionaCliente")
-    public ResponseEntity<?> adicionaCliente(@RequestBody Cliente cliente){
-        return clienteService.adicionaCliente(cliente)
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Objeto do cliente a ser criado",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ClienteRequest.class)
+            )
+    )
+    public ResponseEntity<?> adicionaCliente(@RequestBody ClienteRequest clienteRequest){
+        return clienteService.adicionaCliente(clienteRequest)
                 ? ResponseEntity.ok("Cliente adicionado com sucesso!")
-                : ResponseEntity.ok("Não foi possível adicionar o cliente");
+                : ResponseEntity.internalServerError().body("Não foi possível adicionar o cliente");
     }
 
     @PutMapping("/atualizaCliente")

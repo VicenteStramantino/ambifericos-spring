@@ -1,5 +1,6 @@
 package org.example.ambifericos.Service;
 
+import org.example.ambifericos.DTO.ClienteRequest;
 import org.example.ambifericos.Model.Cliente;
 import org.example.ambifericos.Repository.ClienteRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,18 @@ public class ClienteService {
         return clienteRepository.findClienteByEmailAndSenhaIgnoreCase(email, senha);
     }
 
-    public boolean adicionaCliente(Cliente cliente){
+
+    public Cliente converteParaCliente(ClienteRequest produtoRequest) {
+
+        Cliente cliente = new Cliente();
+        cliente.setNome(produtoRequest.getNome());
+        cliente.setSenha(produtoRequest.getSenha());
+        cliente.setEmail(produtoRequest.getEmail());
+        cliente.setEndereco(produtoRequest.getEndereco());
+        return cliente;
+    }
+
+    public boolean adicionaCliente(ClienteRequest clienteRequest){
         if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
             return false;
         }
