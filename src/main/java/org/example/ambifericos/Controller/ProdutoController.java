@@ -1,6 +1,10 @@
 package org.example.ambifericos.Controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import org.example.ambifericos.DTO.ItemPedidoRequest;
+import org.example.ambifericos.DTO.ProdutoRequest;
 import org.example.ambifericos.Model.Produto;
 import org.example.ambifericos.Service.ProdutoService;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +42,18 @@ public class ProdutoController {
         }
     }
 
+    @Operation(summary = "Adiciona um novo produto", description = "Cria um novo produto")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Objeto do produto a ser criado",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = ProdutoRequest.class)
+            )
+    )
     @PostMapping("/inserir")
-    public ResponseEntity<?> inserir(@RequestBody Produto produto){
-        if(produtoService.inserir(produto)){
+    public ResponseEntity<?> inserir(@RequestBody ProdutoRequest produtoRequest){
+        if(produtoService.inserir(produtoRequest)){
             return ResponseEntity.ok("produto inserido com sucesso");
         }
         else {

@@ -6,34 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Objeto para criação de um Pedido")
+@Schema(description = "Objeto para criação de um Item Pedido")
 public class ItemPedidoRequest {
 
-    @Schema(description = "ID do cliente", example = "1")
-    private long cliente;
+    @Schema(description = "ID do Pedido", example = "1")
+    private long pedidoId;
 
-    @Schema(description = "Lista de itens do pedido")
-    private List<ItemPedidoDTO> itens;
+    @Schema(description = "ID do Produto", example = "2")
+    private long produtoId;
 
-    @Getter
-    @Setter
-    public static class ItemPedidoDTO {
-        @Schema(description = "Produto do pedido")
-        private ProdutoDTO produto;
+    @Schema(description = "ID do Pedido", example = "10")
+    private int quantidade;
 
-        @Schema(description = "Quantidade do produto", example = "2")
-        private int quantidade;
-    }
-
-    @Getter
-    @Setter
-    public static class ProdutoDTO {
-        @Schema(description = "ID do produto", example = "10")
-        private Long id;
-    }
+    @Schema(description = "Subtotal", example = "20")
+    private BigDecimal subtotal;
 }
