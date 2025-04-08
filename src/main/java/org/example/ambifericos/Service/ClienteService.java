@@ -1,7 +1,9 @@
 package org.example.ambifericos.Service;
 
 import org.example.ambifericos.DTO.ClienteRequest;
+import org.example.ambifericos.DTO.ProdutoRequest;
 import org.example.ambifericos.Model.Cliente;
+import org.example.ambifericos.Model.Produto;
 import org.example.ambifericos.Repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +42,11 @@ public class ClienteService {
     }
 
     public boolean adicionaCliente(ClienteRequest clienteRequest){
-        if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
+        Cliente cliente = converteParaCliente(clienteRequest);
+        if (clienteRepository.existsByNome(cliente.getNome())) {
             return false;
         }
-        clienteRepository.save(cliente);
+        clienteRepository.save((cliente));
         return true;
     }
 

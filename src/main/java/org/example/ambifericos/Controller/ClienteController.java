@@ -46,7 +46,7 @@ public class ClienteController {
 
     @GetMapping("/listarClientePeloEmailSenha")
     public ResponseEntity<?> listarClientePeloEmailSenha(@RequestParam String email, @RequestParam String senha){
-        Cliente cliente = clienteService.listarCliqentePeloEmailSenha(email, senha);
+        Cliente cliente = clienteService.listarClientePeloEmailSenha(email, senha);
         return  cliente != null
                 ? ResponseEntity.ok(cliente)
                 : ResponseEntity.internalServerError().body("Cliente não foi encontrado");
