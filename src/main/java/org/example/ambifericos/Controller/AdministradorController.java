@@ -1,5 +1,9 @@
 package org.example.ambifericos.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import org.example.ambifericos.DTO.AdministradorRequest;
+import org.example.ambifericos.DTO.PedidoRequest;
 import org.example.ambifericos.Model.Administrador;
 import org.example.ambifericos.Service.AdministradorService;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +39,18 @@ public class AdministradorController {
         }
     }
 
+    @Operation(summary = "Adiciona um novo administrador", description = "Cria um novo administrador")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Objeto do pedido a ser criado",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = AdministradorRequest.class)
+            )
+    )
     @PostMapping("/inserir")
     public ResponseEntity<?> inserir(@RequestBody Administrador administrador){
-        if(administradorService.inserirAdminstrador(administrador) == true){
+        if(administradorService.inserirAdminstrador(administrador)){
             return ResponseEntity.ok("adminstrador inserido com sucesso.");
         }
         else{
@@ -49,7 +62,7 @@ public class AdministradorController {
 
     @DeleteMapping("/remover")
     public ResponseEntity<?> remover(@RequestParam Long id){
-        if(administradorService.deletarAdmin(id) == false){
+        if(!administradorService.deletarAdmin(id)){
             return ResponseEntity.internalServerError().body("Erro, adminstrador não encontrado");
         }
         else{

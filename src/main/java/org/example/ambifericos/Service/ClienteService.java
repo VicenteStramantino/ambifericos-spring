@@ -35,6 +35,14 @@ public class ClienteService {
         return true;
     }
 
+    public boolean atualizaCliente(Cliente cliente){
+        if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
+            clienteRepository.save(cliente);
+            return true;
+        }
+        return false;
+    }
+
     public boolean removeCliente(Long id){
         clienteRepository.deleteById(id);
         return listarClientePeloId(id) == null;
