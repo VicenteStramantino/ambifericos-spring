@@ -29,7 +29,7 @@ public class AdministradorService {
     }
 
     public boolean inserirAdminstrador(Administrador administrador) {
-        if (administradorRepository.existsByNome(administrador.getNome())) {
+        if (administradorRepository.existsByEmail(administrador.getEmail())) {
             return false;
         }
         administradorRepository.save((administrador));

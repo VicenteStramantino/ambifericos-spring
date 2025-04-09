@@ -1,34 +1,26 @@
 package org.example.ambifericos.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import org.example.ambifericos.DTO.AdministradorRequest;
 import org.example.ambifericos.DTO.ClienteRequest;
 import org.example.ambifericos.Model.Cliente;
 import org.example.ambifericos.Service.ClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/ambifericos/cliente")
 @Validated
 public class ClienteController {
     public final ClienteService clienteService;
-    private final Validator validator;
 
 
-    public ClienteController(ClienteService clienteService, Validator validator){
+    public ClienteController(ClienteService clienteService){
         this.clienteService = clienteService;
-        this.validator = validator;
-
     }
 
     @GetMapping("/listarTudo")
@@ -53,6 +45,7 @@ public class ClienteController {
     }
 
     @PostMapping("/adicionaCliente")
+    @Operation(summary = "Adiciona um novo Cliente", description = "Cria um novo cliente")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Objeto do cliente a ser criado",
             required = true,
@@ -64,59 +57,43 @@ public class ClienteController {
     public ResponseEntity<?> adicionaCliente(@RequestBody ClienteRequest clienteRequest){
         return clienteService.adicionaCliente(clienteRequest)
                 ? ResponseEntity.ok("Cliente adicionado com sucesso!")
-                : ResponseEntity.internalServerError().body("Não foi possível adicionar o cliente");
+                : ResponseEntity.internalServerError().body("Não foi possível adicionar o cliente, pois o mesmo já está cadastrado!");
     }
 
-    @PutMapping("/atualizaCliente")
-    public ResponseEntity<String> atualizarCliente(@RequestBody Cliente clienteAtualizado) {
+        @PutMapping("/atualizaCliente")
+        public ResponseEntity<String> atualizarCliente(@RequestBody Cliente clienteAtualizado) {
         try {
             if (clienteAtualizado.getId() == null) {
                 return ResponseEntity.badRequest().body("ID do cliente é obrigatório");
             }
 
-            Cliente clienteExistente = clienteService.listarClientePeloId(clienteAtualizado.getId());
+            Cliente clienteNovo = clienteService.listarClientePeloId(clienteAtualizado.getId());
 
-            if(clienteExistente == null){
+            if(clienteNovo == null){
                 return ResponseEntity.badRequest().body("Cliente não existe");
             }
 
-            if (clienteAtualizado.getEmail() != null && !clienteAtualizado.getEmail().equals(clienteExistente.getEmail())) {
+            if (clienteAtualizado.getEmail() != null && !clienteAtualizado.getEmail().equals(clienteNovo.getEmail())) {
                 return ResponseEntity.badRequest().body("Não é possível atualizar o e-mail do cliente");
             }
 
             if (clienteAtualizado.getNome() != null) {
-                clienteExistente.setNome(clienteAtualizado.getNome());
+                clienteNovo.setNome(clienteAtualizado.getNome());
             }
             if (clienteAtualizado.getSenha() != null) {
-                clienteExistente.setSenha(clienteAtualizado.getSenha());
+                clienteNovo.setSenha(clienteAtualizado.getSenha());
             }
             if (clienteAtualizado.getEndereco() != null) {
-                clienteExistente.setEndereco(clienteAtualizado.getEndereco());
+                clienteNovo.setEndereco(clienteAtualizado.getEndereco());
             }
 
-            DataBinder dataBinder = new DataBinder(clienteExistente);
-            dataBinder.setValidator(validator);
-            dataBinder.validate();
-            BindingResult result = dataBinder.getBindingResult();
-            if (result.hasErrors()) {
-                return ResponseEntity.badRequest().body(retornaErro(result));
-            }
-
-            clienteService.atualizaCliente(clienteExistente);
-            return ResponseEntity.ok("Cliente atualizado com sucesso");
+            return clienteService.atualizaCliente(clienteNovo)
+                    ? ResponseEntity.ok("Cliente atualizado com sucesso")
+                    : ResponseEntity.internalServerError().body("Cliente atualizado com sucesso");
 
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado!");
         }
-    }
-    public String retornaErro(BindingResult result) {
-        StringBuilder stringBuilderErro = new StringBuilder();
-        if (result.hasErrors()) {
-            for (FieldError error : result.getFieldErrors()) {
-                stringBuilderErro.append("Erro: ").append(error.getDefaultMessage()).append("  |  ");
-            }
-        }
-        return stringBuilderErro.toString();
     }
 
     @DeleteMapping("/removeCliente")

@@ -4,5 +4,5 @@ import org.example.ambifericos.Model.Administrador;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdministradorRepository extends JpaRepository<Administrador, Long> {
-    boolean existsByNome(String nome);
+    boolean existsByEmail(String email);
 }

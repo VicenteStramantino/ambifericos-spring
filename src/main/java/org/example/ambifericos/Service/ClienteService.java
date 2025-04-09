@@ -27,25 +27,27 @@ public class ClienteService {
     }
 
     public Cliente listarClientePeloEmailSenha(String email, String senha){
-        return clienteRepository.findClienteByEmailAndSenhaIgnoreCase(email, senha);
+        return clienteRepository.findClienteByEmailAndSenhaIgnoreCase(email.toLowerCase(), senha);
     }
 
 
     public Cliente converteParaCliente(ClienteRequest produtoRequest) {
-
         Cliente cliente = new Cliente();
+
         cliente.setNome(produtoRequest.getNome());
         cliente.setSenha(produtoRequest.getSenha());
         cliente.setEmail(produtoRequest.getEmail());
         cliente.setEndereco(produtoRequest.getEndereco());
+
         return cliente;
     }
 
     public boolean adicionaCliente(ClienteRequest clienteRequest){
         Cliente cliente = converteParaCliente(clienteRequest);
-        if (clienteRepository.existsByNome(cliente.getNome())) {
+        if (clienteRepository.existsByEmail(cliente.getEmail())) {
             return false;
         }
+        cliente.setEmail(cliente.getEmail().toLowerCase());
         clienteRepository.save((cliente));
         return true;
     }

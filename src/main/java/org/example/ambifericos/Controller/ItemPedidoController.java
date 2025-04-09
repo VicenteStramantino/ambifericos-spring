@@ -36,7 +36,7 @@ public class ItemPedidoController {
     public ResponseEntity<?> listaItemPedidoId(@RequestParam Long id){
         ItemPedido listItemPedido = itemPedidoService.listaItemPedidoPeloId(id);
         return listItemPedido != null
-                ? ResponseEntity.ok(itemPedidoService.listaItensPedido())
+                ? ResponseEntity.ok(listItemPedido)
                 : ResponseEntity.internalServerError().body("Não existe nenhum item pedido com esse ID!");
     }
 

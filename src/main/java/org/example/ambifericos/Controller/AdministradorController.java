@@ -54,11 +54,9 @@ public class AdministradorController {
             return ResponseEntity.ok("adminstrador inserido com sucesso.");
         }
         else{
-            return ResponseEntity.internalServerError().body("Erro, adminstador com este id ja existente.");
+            return ResponseEntity.internalServerError().body("Erro, adminstador já cadastrado!");
         }
     }
-
-
 
     @DeleteMapping("/remover")
     public ResponseEntity<?> remover(@RequestParam Long id){
