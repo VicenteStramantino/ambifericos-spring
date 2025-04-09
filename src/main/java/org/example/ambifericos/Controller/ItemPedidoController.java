@@ -1,5 +1,11 @@
 package org.example.ambifericos.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.ambifericos.DTO.ItemPedidoRequest;
+import org.example.ambifericos.DTO.PedidoRequest;
 import org.example.ambifericos.Model.ItemPedido;
 import org.example.ambifericos.Service.ItemPedidoService;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +36,24 @@ public class ItemPedidoController {
     public ResponseEntity<?> listaItemPedidoId(@RequestParam Long id){
         ItemPedido listItemPedido = itemPedidoService.listaItemPedidoPeloId(id);
         return listItemPedido != null
-                ? ResponseEntity.ok(itemPedidoService.listaItensPedido())
+                ? ResponseEntity.ok(listItemPedido)
                 : ResponseEntity.internalServerError().body("Não existe nenhum item pedido com esse ID!");
     }
 
+    @Operation(
+            summary = "Adiciona novos itens ao pedido",
+            description = "Cria uma lista de itens do pedido para um cliente"
+    )
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Lista de objetos do item do pedido a ser criada",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ItemPedidoRequest.class))
+            )
+    )
     @PostMapping("/adicionaItemPedido")
-    public ResponseEntity<?> adicionaItemPedido(List<ItemPedido> listItemPedido){
+    public ResponseEntity<?> adicionaItemPedido(@RequestBody List<ItemPedidoRequest> listItemPedido){
         return itemPedidoService.adicionaItemPedido(listItemPedido)
             ? ResponseEntity.ok("Item pedido foi adicionado com sucesso")
             : ResponseEntity.ok("Não foi possivel adicionar o item pedido");

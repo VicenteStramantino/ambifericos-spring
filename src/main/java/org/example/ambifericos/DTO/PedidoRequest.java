@@ -24,17 +24,10 @@ public class PedidoRequest {
     @Getter
     @Setter
     public static class ItemPedidoDTO {
-        @Schema(description = "Produto do pedido")
-        private ProdutoDTO produto;
+        @Schema(description = "Produto do pedido", example = "1")
+        private Long produtoId;
 
         @Schema(description = "Quantidade do produto", example = "2")
         private int quantidade;
-    }
-
-    @Getter
-    @Setter
-    public static class ProdutoDTO {
-        @Schema(description = "ID do produto", example = "10")
-        private Long id;
     }
 }

@@ -1,7 +1,11 @@
 package org.example.ambifericos.Service;
 
+import org.example.ambifericos.DTO.ItemPedidoRequest;
+import org.example.ambifericos.DTO.PedidoRequest;
 import org.example.ambifericos.Model.Cliente;
 import org.example.ambifericos.Model.ItemPedido;
+import org.example.ambifericos.Model.Pedido;
+import org.example.ambifericos.Model.Produto;
 import org.example.ambifericos.Repository.ItemPedidoRepository;
 import org.springframework.core.ReactiveAdapterRegistry;
 import org.springframework.stereotype.Service;
@@ -34,7 +38,9 @@ public class ItemPedidoService {
         return itemPedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Item não encontrado"));
     }
 
-    public boolean adicionaItemPedido(List<ItemPedido> listItemPedido){
+    public boolean adicionaItemPedido(List<ItemPedidoRequest> listItemPedidoRequest){
+        List<ItemPedido> listItemPedido = converterParaItemPedido(listItemPedidoRequest);
+
         for (ItemPedido itemPedido : listItemPedido){
             if(pedidoService.listaPedidoPeloId(itemPedido.getPedido().getId()) != null && produtoService.buscarPorID(itemPedido.getPedido().getId()) != null){
                 itemPedidoRepository.save(itemPedido);
@@ -43,6 +49,26 @@ public class ItemPedidoService {
             }
         }
         return true;
+    }
+
+    public List<ItemPedido> converterParaItemPedido(List<ItemPedidoRequest> listItemPedidoRequest) {
+        List<ItemPedido> listItemPedido = new ArrayList<>();
+
+        for (ItemPedidoRequest itemPedidoRequest : listItemPedidoRequest) {
+            Pedido pedido = pedidoService.listaPedidoPeloId(itemPedidoRequest.getPedidoId());
+            Produto produto = produtoService.buscarPorID(itemPedidoRequest.getPedidoId());
+
+            ItemPedido itemPedido = new ItemPedido();
+
+            itemPedido.setPedido(pedido);
+            itemPedido.setProduto(produto);
+            itemPedido.setQuantidade(itemPedidoRequest.getQuantidade());
+            itemPedido.setSubtotal(itemPedidoRequest.getSubtotal());
+
+            listItemPedido.add(itemPedido);
+        }
+
+        return listItemPedido;
     }
 
     public boolean removeItemPedido(Long id){

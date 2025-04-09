@@ -1,6 +1,9 @@
 package org.example.ambifericos.Service;
 
+import org.example.ambifericos.DTO.ClienteRequest;
+import org.example.ambifericos.DTO.ProdutoRequest;
 import org.example.ambifericos.Model.Cliente;
+import org.example.ambifericos.Model.Produto;
 import org.example.ambifericos.Repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +27,28 @@ public class ClienteService {
     }
 
     public Cliente listarClientePeloEmailSenha(String email, String senha){
-        return clienteRepository.findClienteByEmailAndSenhaIgnoreCase(email, senha);
+        return clienteRepository.findClienteByEmailAndSenhaIgnoreCase(email.toLowerCase(), senha);
     }
 
-    public boolean adicionaCliente(Cliente cliente){
-        if (cliente.getId() != null && clienteRepository.existsById(cliente.getId())) {
+
+    public Cliente converteParaCliente(ClienteRequest produtoRequest) {
+        Cliente cliente = new Cliente();
+
+        cliente.setNome(produtoRequest.getNome());
+        cliente.setSenha(produtoRequest.getSenha());
+        cliente.setEmail(produtoRequest.getEmail());
+        cliente.setEndereco(produtoRequest.getEndereco());
+
+        return cliente;
+    }
+
+    public boolean adicionaCliente(ClienteRequest clienteRequest){
+        Cliente cliente = converteParaCliente(clienteRequest);
+        if (clienteRepository.existsByEmail(cliente.getEmail())) {
             return false;
         }
-        clienteRepository.save(cliente);
+        cliente.setEmail(cliente.getEmail().toLowerCase());
+        clienteRepository.save((cliente));
         return true;
     }
 

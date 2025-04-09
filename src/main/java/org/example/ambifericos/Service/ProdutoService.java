@@ -1,9 +1,14 @@
 package org.example.ambifericos.Service;
+import org.example.ambifericos.DTO.ItemPedidoRequest;
+import org.example.ambifericos.DTO.ProdutoRequest;
 import org.example.ambifericos.Model.Cliente;
+import org.example.ambifericos.Model.ItemPedido;
+import org.example.ambifericos.Model.Pedido;
 import org.example.ambifericos.Model.Produto;
 import org.example.ambifericos.Repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,12 +30,25 @@ public class ProdutoService {
         return produto.orElse(null);
     }
 
-    public boolean inserir(Produto produto){
+    public boolean inserir(ProdutoRequest produtoRequest){
+        Produto produto = converteParaProduto(produtoRequest);
         if (produtoRepository.existsByNome(produto.getNome())) {
             return false;
         }
         produtoRepository.save((produto));
         return true;
+    }
+
+    public Produto converteParaProduto(ProdutoRequest produtoRequest) {
+        Produto produto = new Produto();
+
+        produto.setNome(produtoRequest.getNome());
+        produto.setDescricao(produtoRequest.getDescricao());
+        produto.setPreco(produtoRequest.getPreco());
+        produto.setEstoque(produtoRequest.getEstoque());
+        produto.setImagem(produtoRequest.getImagem());
+
+        return produto;
     }
 
     public void atualizarProduto(Produto produto) {

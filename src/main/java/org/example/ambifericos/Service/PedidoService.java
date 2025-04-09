@@ -46,7 +46,7 @@ public class PedidoService {
 
         List<ItemPedido> itens = new ArrayList<>();
         for (PedidoRequest.ItemPedidoDTO itemDTO : pedidoRequest.getItens()) {
-            Produto produto = produtoService.buscarPorID(itemDTO.getProduto().getId());
+            Produto produto = produtoService.buscarPorID(itemDTO.getProdutoId());
 
             ItemPedido itemPedido = new ItemPedido();
             itemPedido.setProduto(produto);
