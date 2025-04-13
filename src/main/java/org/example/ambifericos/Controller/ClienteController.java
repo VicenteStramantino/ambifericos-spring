@@ -60,8 +60,8 @@ public class ClienteController {
                 : ResponseEntity.internalServerError().body("Não foi possível adicionar o cliente, pois o mesmo já está cadastrado!");
     }
 
-        @PutMapping("/atualizaCliente")
-        public ResponseEntity<String> atualizarCliente(@RequestBody Cliente clienteAtualizado) {
+    @PutMapping("/atualizaCliente")
+    public ResponseEntity<String> atualizarCliente(@RequestBody Cliente clienteAtualizado) {
         try {
             if (clienteAtualizado.getId() == null) {
                 return ResponseEntity.badRequest().body("ID do cliente é obrigatório");
@@ -86,11 +86,13 @@ public class ClienteController {
             if (clienteAtualizado.getEndereco() != null) {
                 clienteNovo.setEndereco(clienteAtualizado.getEndereco());
             }
+            if (clienteNovo.isAdm() != clienteAtualizado.isAdm()) {
+                clienteNovo.setAdm(clienteAtualizado.isAdm());
+            }
 
             return clienteService.atualizaCliente(clienteNovo)
                     ? ResponseEntity.ok("Cliente atualizado com sucesso")
                     : ResponseEntity.internalServerError().body("Cliente atualizado com sucesso");
-
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado!");
         }

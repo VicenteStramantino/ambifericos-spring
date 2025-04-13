@@ -33,4 +33,8 @@ public class ClienteRequest {
     @Column(columnDefinition = "TEXT")
     private String endereco;
 
+    @Schema(description = "Indica se é um administrador", example = "false")
+    @Column(columnDefinition = "BOOLEAN")
+    private boolean adm;
+
 }

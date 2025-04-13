@@ -31,13 +31,14 @@ public class ClienteService {
     }
 
 
-    public Cliente converteParaCliente(ClienteRequest produtoRequest) {
+    public Cliente converteParaCliente(ClienteRequest clienteRequest) {
         Cliente cliente = new Cliente();
 
-        cliente.setNome(produtoRequest.getNome());
-        cliente.setSenha(produtoRequest.getSenha());
-        cliente.setEmail(produtoRequest.getEmail());
-        cliente.setEndereco(produtoRequest.getEndereco());
+        cliente.setNome(clienteRequest.getNome());
+        cliente.setSenha(clienteRequest.getSenha());
+        cliente.setEmail(clienteRequest.getEmail());
+        cliente.setEndereco(clienteRequest.getEndereco());
+        cliente.setAdm(clienteRequest.isAdm());
 
         return cliente;
     }
